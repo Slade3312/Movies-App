@@ -1,0 +1,35 @@
+@import "~antd/dist/antd.css";
+
+.movies-card {
+  /* max-width: 451px; */
+  height: 279px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+.poster-card {
+  height: 100%;
+  float: left;
+  margin-right: 20px;
+}
+
+.genre {
+  background-color: #fafafa;
+  margin: 0px 1em 1em 0;
+}
+
+.vote-average .ant-badge-count {
+  background-color: #fff;
+  color: black;
+  border: 2px solid #e9d100;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 2px 0 0 0;
+}
+/*Переопределение элемента из antd.css*/
+.ant-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
