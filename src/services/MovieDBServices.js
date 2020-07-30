@@ -14,6 +14,9 @@ export default class MovieDBServices {
     }
     return res.json();
   }
+  /* _transformMovie()-ругается eslint на _
+    #transformMovie()- нужен плагин для babel так и не решил
+    как сделать его приватным */
 
   transformMovie(movie) {
     return {
@@ -27,11 +30,16 @@ export default class MovieDBServices {
     };
   }
 
-  async getMovies() {
+  async getMovies(page, search) {
     const res = await this.getResource(
-      `https://api.themoviedb.org/3/search/movie?language=en-En&query=return&page=1&include_adult=false`
+      `https://api.themoviedb.org/3/search/movie?language=en-En&query=${search}&page=${page}&include_adult=false`
     );
+    const totalPages = res.total_pages;
     const movies = res.results;
-    return movies.map((movie) => this.transformMovie(movie));
+    const requiredData = movies.map((movie) => this.transformMovie(movie));
+    return {
+      movies: requiredData,
+      totalPages,
+    };
   }
 }

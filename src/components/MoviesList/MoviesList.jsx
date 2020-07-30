@@ -1,34 +1,108 @@
-import React from 'react';
-import { Row, Col } from 'antd';
+import React, { Component } from 'react';
+import { Row, Col, Spin, Alert, Pagination } from 'antd';
 import './MoviesList.css';
-import PropTypes, { arrayOf } from 'prop-types';
+import PropTypes from 'prop-types';
 import MovieCard from '../MovieCard/MovieCard';
+import MovieDBServices from '../../services/MovieDBServices';
 
-export default function MoviesList(props) {
-  const { movies } = props;
-  const elements = movies.map((movie) => {
-    const { id, ...items } = movie;
-    return (
-      <Col className="gutter-row" span={12} key={id}>
-        <MovieCard movie={items} />
-      </Col>
+export default class MoviesList extends Component {
+  static propTypes = {
+    searchValue: PropTypes.string.isRequired,
+  };
+
+  movieDBServices = new MovieDBServices();
+
+  state = {
+    movies: null,
+    loading: true,
+    error: false,
+    errMessage: null,
+    page: 1,
+    totalPages: null,
+  };
+
+  componentDidMount() {
+    const { page } = this.state;
+    const { searchValue } = this.props;
+    this.updateState(page, searchValue);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { page } = this.state;
+    const { searchValue } = this.props;
+    //! условие говнокод!
+    if ((page !== prevState.page || searchValue !== prevProps.searchValue) && searchValue !== '') {
+      this.updateState(page, searchValue);
+    }
+  }
+
+  onChange = (event) => {
+    this.setState({
+      page: event,
+      loading: true,
+    });
+  };
+
+  updateState(page, searchValue) {
+    //! Название получше!
+    this.movieDBServices
+      .getMovies(page, searchValue)
+      .then(({ movies, totalPages }) => {
+        this.setState({
+          movies,
+          loading: false,
+          totalPages,
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          error: true,
+          loading: false,
+          errMessage: err.message,
+        });
+      });
+  }
+
+  render() {
+    const { movies, loading, error, errMessage, page, totalPages } = this.state;
+    let elements;
+    if (movies) {
+      elements = movies.map((movie) => {
+        const { id, ...items } = movie;
+        return (
+          <Col className="gutter-row" span={12} key={id}>
+            <MovieCard movie={items} />
+          </Col>
+        );
+      });
+    }
+
+    const pagination = (
+      <Pagination
+        onChange={(event) => this.onChange(event)}
+        size="small"
+        total={totalPages}
+        defaultPageSize
+        showSizeChanger={false}
+        defaultCurrent={page}
+      />
     );
-  });
+    const hasData = !(loading || error);
+    const spinner = loading ? <Spin tip="Loading..." /> : null;
+    const content = hasData ? (
+      <>
+        <Row gutter={[37, 37]}>{elements}</Row>
+        {pagination}
+      </>
+    ) : null;
+    const alert = error ? <Alert message="Error" description={errMessage} type="error" /> : null;
 
-  return <Row gutter={[37, 37]}>{elements}</Row>;
+    return (
+      <div className="wrapper-card-list">
+        {spinner}
+        {content}
+        {alert}
+      </div>
+    );
+  }
 }
-
-MoviesList.defaultProps = {};
-
-MoviesList.propTypes = {
-  movies: arrayOf(
-    PropTypes.shape({
-      posterPath: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      releaseDate: PropTypes.string.isRequired,
-      overview: PropTypes.string.isRequired,
-      popularity: PropTypes.number.isRequired,
-      voteAverage: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-};

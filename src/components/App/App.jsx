@@ -1,35 +1,25 @@
 import React, { Component } from 'react';
 // import logo from '../../logo.svg';
 import './App.css';
-// import Header from '../Header/Header';
+import Header from '../Header/Header';
 import MoviesList from '../MoviesList/MoviesList';
 // import Footer from '../Footer/Footer';
-import MovieDBServices from '../../services/MovieDBServices';
 
 export default class App extends Component {
-  movieDBServices = new MovieDBServices();
-
   state = {
-    movies: [],
+    searchValue: 'return',
   };
 
-  componentDidMount() {
-    this.updateStateTemp();
-  }
-
-  updateStateTemp() {
-    this.movieDBServices.getMovies().then((data) => {
-      const movies = data.slice(0, 6);
-      this.setState({ movies });
-    });
-  }
+  moviesSearchQuery = (value) => {
+    this.setState({ searchValue: value });
+  };
 
   render() {
-    const { movies } = this.state;
+    const { searchValue } = this.state;
     return (
       <div className="App">
-        {/* <Header /> */}
-        <MoviesList movies={movies} />
+        <Header moviesSearchQuery={(value) => this.moviesSearchQuery(value)} />
+        <MoviesList searchValue={searchValue} />
         {/* <Footer /> */}
       </div>
     );

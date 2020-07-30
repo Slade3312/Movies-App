@@ -1,5 +1,9 @@
 @import "~antd/dist/antd.css";
 
+h2 {
+  margin-right: 2em;
+}
+
 .movies-card {
   /* max-width: 451px; */
   height: 279px;

@@ -14,7 +14,7 @@ export default function MovieCard(props) {
   // eslint-disable-next-line react/destructuring-assignment
   const { posterPath, title, releaseDate, overview, popularity, voteAverage } = props.movie;
   const shortReview = cropText(overview);
-  const dateRelease = format(new Date(releaseDate), 'PP');
+  const dateRelease = releaseDate === '' ? 'not release date' : format(new Date(releaseDate), 'PP');
   const srcImg = `https://image.tmdb.org/t/p/w220_and_h330_face/${posterPath}`;
   const stars = popularity / 10;
   return (
