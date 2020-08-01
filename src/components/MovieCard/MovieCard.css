@@ -1,25 +1,38 @@
 @import "~antd/dist/antd.css";
 
 h2 {
-  margin-right: 2em;
+  margin-right: 1.8em;
+  font-size: 20px;
+  line-height: 28px;
+  margin-bottom: 0em;
 }
 
 .movies-card {
-  /* max-width: 451px; */
   height: 279px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
   position: relative;
+  text-align: left;
+  padding-right: 14px;
 }
 
-.poster-card {
+.movies-card__poster {
   height: 100%;
   float: left;
-  margin-right: 20px;
+  margin-right: 14px;
+  width: 42%;
 }
 
-.genre {
+.movies-card__genre {
   background-color: #fafafa;
-  margin: 0px 1em 1em 0;
+  margin: 0px 0.3em 0.3em 0;
+  width: fit-content;
+  height: 20px;
+  font-size: 12px;
+  line-height: 15px;
+}
+
+.movies-card__overview {
+  margin: 0;
 }
 
 .vote-average .ant-badge-count {
@@ -36,4 +49,17 @@ h2 {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.movies-card__release {
+  margin-bottom: 0.2em;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.movies-card__stars {
+  font-size: 14px;
+  position: absolute;
+  bottom: 10px;
+  right: 25px;
 }

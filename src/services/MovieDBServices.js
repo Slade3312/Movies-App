@@ -1,5 +1,5 @@
 export default class MovieDBServices {
-  async getResource(url) {
+  getResource = async (url) => {
     const token =
       'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZGEzOGVlMGVmNjMwYjczZmZkZDhkZjdlZmM3ZTA1ZCIsInN1YiI6IjVmMTY1NmQ4YzkyYzVkMDAzNjMwMzJjMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.4pVDmgfEggVyLjVUrISqiR7Cvooz7xtOqBVIs-Yinxo';
 
@@ -13,7 +13,7 @@ export default class MovieDBServices {
       throw new Error(`Could not fetch${url} , received ${res.status}`);
     }
     return res.json();
-  }
+  };
   /* _transformMovie()-ругается eslint на _
     #transformMovie()- нужен плагин для babel так и не решил
     как сделать его приватным */
@@ -27,10 +27,11 @@ export default class MovieDBServices {
       popularity: movie.popularity,
       voteAverage: movie.vote_average,
       id: movie.id,
+      genreIds: movie.genre_ids,
     };
   }
 
-  async getMovies(page, search) {
+  getMovies = async (page, search) => {
     const res = await this.getResource(
       `https://api.themoviedb.org/3/search/movie?language=en-En&query=${search}&page=${page}&include_adult=false`
     );
@@ -41,5 +42,10 @@ export default class MovieDBServices {
       movies: requiredData,
       totalPages,
     };
-  }
+  };
+
+  getGenresList = async () => {
+    const res = await this.getResource(`https://api.themoviedb.org/3/genre/movie/list?language=en-US`);
+    return res.genres;
+  };
 }

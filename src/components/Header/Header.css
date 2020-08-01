@@ -1,1 +1,7 @@
-@import '~antd/dist/antd.css';
+@import "~antd/dist/antd.css";
+
+.input-search {
+    width: 910px;
+    margin: auto;
+    display: block;
+}

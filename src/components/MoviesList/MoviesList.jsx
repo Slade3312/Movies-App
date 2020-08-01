@@ -3,14 +3,22 @@ import { Row, Col, Spin, Alert, Pagination } from 'antd';
 import './MoviesList.css';
 import PropTypes from 'prop-types';
 import MovieCard from '../MovieCard/MovieCard';
-import MovieDBServices from '../../services/MovieDBServices';
 
 export default class MoviesList extends Component {
   static propTypes = {
     searchValue: PropTypes.string.isRequired,
+    getMovies: PropTypes.func.isRequired,
+    genres: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+      })
+    ),
   };
 
-  movieDBServices = new MovieDBServices();
+  static defaultProps = {
+    genres: null,
+  };
 
   state = {
     movies: null,
@@ -24,7 +32,8 @@ export default class MoviesList extends Component {
   componentDidMount() {
     const { page } = this.state;
     const { searchValue } = this.props;
-    this.updateState(page, searchValue);
+
+    this.updateMovies(page, searchValue);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,7 +41,7 @@ export default class MoviesList extends Component {
     const { searchValue } = this.props;
     //! условие говнокод!
     if ((page !== prevState.page || searchValue !== prevProps.searchValue) && searchValue !== '') {
-      this.updateState(page, searchValue);
+      this.updateMovies(page, searchValue);
     }
   }
 
@@ -43,10 +52,9 @@ export default class MoviesList extends Component {
     });
   };
 
-  updateState(page, searchValue) {
-    //! Название получше!
-    this.movieDBServices
-      .getMovies(page, searchValue)
+  updateMovies(page, searchValue) {
+    const { getMovies } = this.props;
+    getMovies(page, searchValue)
       .then(({ movies, totalPages }) => {
         this.setState({
           movies,
@@ -65,13 +73,14 @@ export default class MoviesList extends Component {
 
   render() {
     const { movies, loading, error, errMessage, page, totalPages } = this.state;
+    const { genres } = this.props;
     let elements;
     if (movies) {
       elements = movies.map((movie) => {
         const { id, ...items } = movie;
         return (
           <Col className="gutter-row" span={12} key={id}>
-            <MovieCard movie={items} />
+            <MovieCard {...items} genres={genres} />
           </Col>
         );
       });
@@ -95,11 +104,16 @@ export default class MoviesList extends Component {
         {pagination}
       </>
     ) : null;
-    const alert = error ? <Alert message="Error" description={errMessage} type="error" /> : null;
+    const alert = error ? (
+      <Alert message="Error" description={`${errMessage}, please try to reload the site`} type="error" />
+    ) : null;
+    const notMovies =
+      hasData && movies.length === 0 ? <Alert message="No results were found for your search." type="info" /> : null;
 
     return (
       <div className="wrapper-card-list">
         {spinner}
+        {notMovies}
         {content}
         {alert}
       </div>
