@@ -8,18 +8,11 @@ export default class MoviesList extends Component {
   static propTypes = {
     searchValue: PropTypes.string,
     getDataMovies: PropTypes.func.isRequired,
-    genres: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-      })
-    ),
     sessionId: PropTypes.string,
-    activeTab: PropTypes.number,
+    activeTab: PropTypes.string,
   };
 
   static defaultProps = {
-    genres: null,
     sessionId: null,
     searchValue: null,
     activeTab: 1,
@@ -80,13 +73,14 @@ export default class MoviesList extends Component {
 
   render() {
     const { movies, loading, error, errMessage, page, totalPages } = this.state;
+    const { sessionId } = this.props;
     let elements;
     if (movies) {
       elements = movies.map((movie) => {
         const { id } = movie;
         return (
           <Col className="gutter-row" span={12} key={id}>
-            <MovieCard {...movie} />
+            <MovieCard {...movie} sessionId={sessionId} />
           </Col>
         );
       });

@@ -15,32 +15,24 @@ function cropText(text) {
   return shortReview;
 }
 
+function setStyleBorderBadge(value) {
+  if (value >= 0 && value < 3) return { borderColor: '#E90000' };
+  if (value >= 3 && value < 5) return { borderColor: '#E97E00' };
+  if (value >= 5 && value < 7) return { borderColor: '#E9D100' };
+  return { borderColor: '#66E900' };
+}
+
 function onRating(rate, sessionId, id) {
-  setRating(rate, sessionId, id)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
+  setRating(rate, sessionId, id);
 }
 
 function MovieCard(props) {
   const baseImgSrc = 'https://image.tmdb.org/t/p/w220_and_h330_face/';
-  const {
-    posterPath,
-    title,
-    releaseDate,
-    overview,
-    voteAverage,
-    genreIds,
-    options: { genres, sessionId },
-    id,
-    rating,
-  } = props;
+  const { posterPath, title, releaseDate, overview, voteAverage, genreIds, genres, sessionId, id, rating } = props;
   const shortReview = cropText(overview);
   const dateRelease = releaseDate === '' ? 'not release date' : format(new Date(releaseDate), 'PP');
   const srcImg = posterPath === null ? notPoster : baseImgSrc + posterPath;
+
   let genreButtons = null;
   if (genres) {
     genreButtons = genreIds.map((idButtons) => {
@@ -55,7 +47,7 @@ function MovieCard(props) {
 
   return (
     <div className="movies-card">
-      <Badge count={voteAverage} className="vote-average" />
+      <Badge count={voteAverage} className="vote-average" style={setStyleBorderBadge(voteAverage)} />
       <img className="movies-card__poster" src={srcImg} alt="poster" />
       <h2>{title}</h2>
       <p className="movies-card__release">{dateRelease}</p>
@@ -76,7 +68,8 @@ MovieCard.defaultProps = {
   releaseDate: '',
   posterPath: null,
   overview: 'not overview',
-  options: { genres: null, sessionId: null },
+  genres: null,
+  sessionId: null,
   rating: null,
 };
 
@@ -87,15 +80,13 @@ MovieCard.propTypes = {
   overview: PropTypes.string,
   voteAverage: PropTypes.number.isRequired,
   genreIds: PropTypes.arrayOf(number).isRequired,
-  options: PropTypes.shape({
-    genres: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-      })
-    ),
-    sessionId: PropTypes.string,
-  }),
+  genres: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+    })
+  ),
+  sessionId: PropTypes.string,
   id: PropTypes.number.isRequired,
   rating: PropTypes.number,
 };

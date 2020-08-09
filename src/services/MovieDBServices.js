@@ -22,13 +22,12 @@ export default class MovieDBServices {
   };
 
   setRating = async (rate, sessionId, id) => {
-    console.log(sessionId, id);
     const body = {
       value: rate,
     };
     const res = await this.workResources(
       `https://z4vrpkijmodhwsxzc.stoplight-proxy.io/3/movie/${id}/rating?guest_session_id=${sessionId}`,
-      // `${this.baseUrl}/movie/${id}/rating?guest_session_id=${sessionId}`,
+      // `${this.baseUrl}/movie/${id}/rating?guest_session_id=${sessionId}`, - это не работает!
       'POST',
       body
     );
@@ -79,7 +78,6 @@ export default class MovieDBServices {
     );
     const totalPages = res.total_pages;
     const movies = res.results;
-    console.log(res, sessionId);
     const requiredData = movies.map((movie) => this.transformMovie(movie));
     return {
       movies: requiredData,

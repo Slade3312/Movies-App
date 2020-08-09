@@ -55,15 +55,15 @@ export default class App extends Component {
     const { searchValue, genres, sessionId, activeTab } = this.state;
     return (
       <ErrorBoundary>
-        <ServiceProvider value={{ genres, sessionId }}>
+        <ServiceProvider value={genres}>
           <div className="App">
             <Tabs defaultActiveKey="1" onChange={this.callback} centered="true">
               <TabPane tab="Search" key="1">
                 <Header moviesSearchQuery={(value) => this.moviesSearchQuery(value)} />
-                <MoviesList searchValue={searchValue} getDataMovies={getSearchMovies} />
+                <MoviesList searchValue={searchValue} getDataMovies={getSearchMovies} sessionId={sessionId} />
               </TabPane>
               <TabPane tab="Rated" key="2">
-                <MoviesList getDataMovies={getRatedMovies} activeTab={activeTab} />
+                <MoviesList getDataMovies={getRatedMovies} activeTab={activeTab} sessionId={sessionId} />
               </TabPane>
             </Tabs>
           </div>

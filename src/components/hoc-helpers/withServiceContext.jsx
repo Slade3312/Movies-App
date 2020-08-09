@@ -5,8 +5,8 @@ const withServiceContext = (Wrapper) => {
   return (props) => {
     return (
       <ServiceConsumer>
-        {(options) => {
-          return <Wrapper {...props} options={options} />;
+        {(genres) => {
+          return <Wrapper {...props} genres={genres} />;
         }}
       </ServiceConsumer>
     );
