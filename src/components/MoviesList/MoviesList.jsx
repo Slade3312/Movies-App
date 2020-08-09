@@ -7,17 +7,20 @@ import MovieCard from '../MovieCard/MovieCard';
 export default class MoviesList extends Component {
   static propTypes = {
     searchValue: PropTypes.string.isRequired,
-    getMovies: PropTypes.func.isRequired,
+    getDataMovies: PropTypes.func.isRequired,
     genres: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number,
         name: PropTypes.string,
       })
     ),
+    sessionId: PropTypes.string,
+    activeTab: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
     genres: null,
+    sessionId: null,
   };
 
   state = {
@@ -31,17 +34,19 @@ export default class MoviesList extends Component {
 
   componentDidMount() {
     const { page } = this.state;
-    const { searchValue } = this.props;
+    const { searchValue: search, sessionId } = this.props;
 
-    this.updateMovies(page, searchValue);
+    this.updateMovies({ page, search, sessionId });
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { page } = this.state;
-    const { searchValue } = this.props;
-    //! условие говнокод!
-    if ((page !== prevState.page || searchValue !== prevProps.searchValue) && searchValue !== '') {
-      this.updateMovies(page, searchValue);
+    const { searchValue: search, sessionId, activeTab } = this.props;
+    if ((page !== prevState.page || search !== prevProps.searchValue) && search !== '') {
+      this.updateMovies({ page, search, sessionId });
+    }
+    if (activeTab === '2' && prevProps.activeTab !== '2') {
+      this.updateMovies({ page, search, sessionId });
     }
   }
 
@@ -52,9 +57,9 @@ export default class MoviesList extends Component {
     });
   };
 
-  updateMovies(page, searchValue) {
-    const { getMovies } = this.props;
-    getMovies(page, searchValue)
+  updateMovies(options) {
+    const { getDataMovies } = this.props;
+    getDataMovies(options)
       .then(({ movies, totalPages }) => {
         this.setState({
           movies,
@@ -73,14 +78,14 @@ export default class MoviesList extends Component {
 
   render() {
     const { movies, loading, error, errMessage, page, totalPages } = this.state;
-    const { genres } = this.props;
+    const { genres, sessionId } = this.props;
     let elements;
     if (movies) {
       elements = movies.map((movie) => {
-        const { id, ...items } = movie;
+        const { id } = movie;
         return (
           <Col className="gutter-row" span={12} key={id}>
-            <MovieCard {...items} genres={genres} />
+            <MovieCard {...movie} genres={genres} sessionId={sessionId} />
           </Col>
         );
       });

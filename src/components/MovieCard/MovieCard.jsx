@@ -4,6 +4,9 @@ import { Button, Rate, Badge } from 'antd';
 import { format } from 'date-fns';
 import PropTypes, { number } from 'prop-types';
 import notPoster from '../../img/notPoster.jpg';
+import MovieDBServices from '../../services/MovieDBServices';
+
+const { setRating } = new MovieDBServices();
 
 function cropText(text) {
   const spaceIndex = text.lastIndexOf(' ', 140);
@@ -11,20 +14,29 @@ function cropText(text) {
   return shortReview;
 }
 
+function onRating(rate, sessionId, id) {
+  setRating(rate, sessionId, id)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+}
+
 export default function MovieCard(props) {
   const baseImgSrc = 'https://image.tmdb.org/t/p/w220_and_h330_face/';
-  const { posterPath, title, releaseDate, overview, popularity, voteAverage, genreIds, genres } = props;
+  const { posterPath, title, releaseDate, overview, voteAverage, genreIds, genres, sessionId, id, rating } = props;
+  console.log(`sessionId, id, rating:`, sessionId, id, rating);
   const shortReview = cropText(overview);
-  // console.log(genreIds);
   const dateRelease = releaseDate === '' ? 'not release date' : format(new Date(releaseDate), 'PP');
   const srcImg = posterPath === null ? notPoster : baseImgSrc + posterPath;
-  const stars = popularity / 10;
   let genreButtons = null;
   if (genres) {
-    genreButtons = genreIds.map((id) => {
-      const { name } = genres.find((genre) => genre.id === id);
+    genreButtons = genreIds.map((idButtons) => {
+      const { name } = genres.find((genre) => genre.id === idButtons);
       return (
-        <Button className="movies-card__genre" size="small">
+        <Button className="movies-card__genre" size="small" key={idButtons}>
           {name}
         </Button>
       );
@@ -39,7 +51,13 @@ export default function MovieCard(props) {
       <p className="movies-card__release">{dateRelease}</p>
       {genreButtons}
       <p className="movies-card__overview">{shortReview}</p>
-      <Rate className="movies-card__stars" disabled defaultValue={stars} count={10} allowHalf />
+      <Rate
+        className="movies-card__stars"
+        allowHalf
+        defaultValue={rating}
+        count={10}
+        onChange={(rate) => onRating(rate, sessionId, id)}
+      />
     </div>
   );
 }
@@ -56,7 +74,6 @@ MovieCard.propTypes = {
   title: PropTypes.string.isRequired,
   releaseDate: PropTypes.string,
   overview: PropTypes.string,
-  popularity: PropTypes.number.isRequired,
   voteAverage: PropTypes.number.isRequired,
   genreIds: PropTypes.arrayOf(number).isRequired,
   genres: PropTypes.arrayOf(
@@ -65,4 +82,7 @@ MovieCard.propTypes = {
       name: PropTypes.string,
     })
   ),
+  sessionId: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  rating: PropTypes.number.isRequired,
 };
