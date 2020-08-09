@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import PropTypes, { number } from 'prop-types';
 import notPoster from '../../img/notPoster.jpg';
 import MovieDBServices from '../../services/MovieDBServices';
+import withServiceContext from '../hoc-helpers/withServiceContext';
 
 const { setRating } = new MovieDBServices();
 
@@ -24,10 +25,19 @@ function onRating(rate, sessionId, id) {
     });
 }
 
-export default function MovieCard(props) {
+function MovieCard(props) {
   const baseImgSrc = 'https://image.tmdb.org/t/p/w220_and_h330_face/';
-  const { posterPath, title, releaseDate, overview, voteAverage, genreIds, genres, sessionId, id, rating } = props;
-  console.log(`sessionId, id, rating:`, sessionId, id, rating);
+  const {
+    posterPath,
+    title,
+    releaseDate,
+    overview,
+    voteAverage,
+    genreIds,
+    options: { genres, sessionId },
+    id,
+    rating,
+  } = props;
   const shortReview = cropText(overview);
   const dateRelease = releaseDate === '' ? 'not release date' : format(new Date(releaseDate), 'PP');
   const srcImg = posterPath === null ? notPoster : baseImgSrc + posterPath;
@@ -66,7 +76,8 @@ MovieCard.defaultProps = {
   releaseDate: '',
   posterPath: null,
   overview: 'not overview',
-  genres: null,
+  options: { genres: null, sessionId: null },
+  rating: null,
 };
 
 MovieCard.propTypes = {
@@ -76,13 +87,17 @@ MovieCard.propTypes = {
   overview: PropTypes.string,
   voteAverage: PropTypes.number.isRequired,
   genreIds: PropTypes.arrayOf(number).isRequired,
-  genres: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-    })
-  ),
-  sessionId: PropTypes.string.isRequired,
+  options: PropTypes.shape({
+    genres: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+      })
+    ),
+    sessionId: PropTypes.string,
+  }),
   id: PropTypes.number.isRequired,
-  rating: PropTypes.number.isRequired,
+  rating: PropTypes.number,
 };
+
+export default withServiceContext(MovieCard);

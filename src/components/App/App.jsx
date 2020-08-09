@@ -1,10 +1,13 @@
+/* eslint-disable max-classes-per-file */
 import React, { Component } from 'react';
+import { Tabs } from 'antd';
+import { ServiceProvider } from '../serviceContext/serviceContext';
 // import logo from '../../logo.svg';
 import './App.css';
-import { Tabs } from 'antd';
 import Header from '../Header/Header';
 import MoviesList from '../MoviesList/MoviesList';
 import MovieDBServices from '../../services/MovieDBServices';
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 const { getSearchMovies, getGenresList, getSessionId, getRatedMovies } = new MovieDBServices();
 
@@ -51,22 +54,21 @@ export default class App extends Component {
     const { TabPane } = Tabs;
     const { searchValue, genres, sessionId, activeTab } = this.state;
     return (
-      <div className="App">
-        <Tabs defaultActiveKey="1" onChange={this.callback} centered="true">
-          <TabPane tab="Search" key="1">
-            <Header moviesSearchQuery={(value) => this.moviesSearchQuery(value)} />
-            <MoviesList
-              searchValue={searchValue}
-              genres={genres}
-              sessionId={sessionId}
-              getDataMovies={getSearchMovies}
-            />
-          </TabPane>
-          <TabPane tab="Rated" key="2">
-            <MoviesList genres={genres} sessionId={sessionId} getDataMovies={getRatedMovies} activeTab={activeTab} />
-          </TabPane>
-        </Tabs>
-      </div>
+      <ErrorBoundary>
+        <ServiceProvider value={{ genres, sessionId }}>
+          <div className="App">
+            <Tabs defaultActiveKey="1" onChange={this.callback} centered="true">
+              <TabPane tab="Search" key="1">
+                <Header moviesSearchQuery={(value) => this.moviesSearchQuery(value)} />
+                <MoviesList searchValue={searchValue} getDataMovies={getSearchMovies} />
+              </TabPane>
+              <TabPane tab="Rated" key="2">
+                <MoviesList getDataMovies={getRatedMovies} activeTab={activeTab} />
+              </TabPane>
+            </Tabs>
+          </div>
+        </ServiceProvider>
+      </ErrorBoundary>
     );
   }
 }

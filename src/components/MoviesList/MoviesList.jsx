@@ -6,7 +6,7 @@ import MovieCard from '../MovieCard/MovieCard';
 
 export default class MoviesList extends Component {
   static propTypes = {
-    searchValue: PropTypes.string.isRequired,
+    searchValue: PropTypes.string,
     getDataMovies: PropTypes.func.isRequired,
     genres: PropTypes.arrayOf(
       PropTypes.shape({
@@ -15,12 +15,14 @@ export default class MoviesList extends Component {
       })
     ),
     sessionId: PropTypes.string,
-    activeTab: PropTypes.number.isRequired,
+    activeTab: PropTypes.number,
   };
 
   static defaultProps = {
     genres: null,
     sessionId: null,
+    searchValue: null,
+    activeTab: 1,
   };
 
   state = {
@@ -78,14 +80,13 @@ export default class MoviesList extends Component {
 
   render() {
     const { movies, loading, error, errMessage, page, totalPages } = this.state;
-    const { genres, sessionId } = this.props;
     let elements;
     if (movies) {
       elements = movies.map((movie) => {
         const { id } = movie;
         return (
           <Col className="gutter-row" span={12} key={id}>
-            <MovieCard {...movie} genres={genres} sessionId={sessionId} />
+            <MovieCard {...movie} />
           </Col>
         );
       });
