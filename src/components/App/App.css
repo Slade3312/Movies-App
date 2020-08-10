@@ -1,7 +1,8 @@
 @import "~antd/dist/antd.css";
 
 .App {
-  width: 1010px;
+  max-width: 1010px;
+  width: 95%;
   margin: auto;
   background-color: white;
   height: fit-content;

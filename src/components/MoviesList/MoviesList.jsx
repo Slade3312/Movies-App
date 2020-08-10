@@ -15,7 +15,7 @@ export default class MoviesList extends Component {
   static defaultProps = {
     sessionId: null,
     searchValue: null,
-    activeTab: 1,
+    activeTab: '1',
   };
 
   state = {
@@ -79,12 +79,13 @@ export default class MoviesList extends Component {
       elements = movies.map((movie) => {
         const { id } = movie;
         return (
-          <Col className="gutter-row" span={12} key={id}>
+          <Col className="gutter-row" span={24} key={id} flex="387px" lg={12}>
             <MovieCard {...movie} sessionId={sessionId} />
           </Col>
         );
       });
     }
+    // lg={{ span: 12, offset: 0 }}
 
     const pagination = (
       <Pagination
@@ -100,7 +101,9 @@ export default class MoviesList extends Component {
     const spinner = loading ? <Spin tip="Loading..." /> : null;
     const content = hasData ? (
       <>
-        <Row gutter={[37, 37]}>{elements}</Row>
+        <Row gutter={[37, 37]} justify="space-around">
+          {elements}
+        </Row>
         {pagination}
       </>
     ) : null;

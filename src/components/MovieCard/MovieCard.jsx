@@ -23,7 +23,9 @@ function setStyleBorderBadge(value) {
 }
 
 function onRating(rate, sessionId, id) {
-  setRating(rate, sessionId, id);
+  setRating(rate, sessionId, id).catch((err) => {
+    console.log(err);
+  });
 }
 
 function MovieCard(props) {

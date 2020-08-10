@@ -1,7 +1,18 @@
 @import "~antd/dist/antd.css";
 
-.input-search {
-    width: 910px;
+.wrapper-header {
+    width: 390px;
     margin: auto;
+}
+
+.input-search {
+    width: 100%;
     display: block;
+}
+
+@media screen and (min-width: 992px) {
+    .wrapper-header {
+        width: 866px;
+        margin: auto;
+    }
 }

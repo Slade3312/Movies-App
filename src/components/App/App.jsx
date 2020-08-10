@@ -16,7 +16,7 @@ export default class App extends Component {
     searchValue: 'return',
     genres: null,
     sessionId: null,
-    activeTab: 1,
+    activeTab: '1',
   };
 
   constructor(props) {
