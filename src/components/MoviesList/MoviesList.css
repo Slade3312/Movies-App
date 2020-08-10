@@ -1,0 +1,19 @@
+@import "~antd/dist/antd.css";
+
+/* .spin-loading {
+  margin: auto;
+} */
+
+/* .gutter-row {
+  width: fit-content;
+  height: fit-content;
+  min-width: 473px;
+} */
+
+.wrapper-card-list {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 30px 0px 30px 0px;
+  width: 90%;
+  margin: auto;
+}
