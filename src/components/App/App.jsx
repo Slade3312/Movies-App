@@ -1,8 +1,6 @@
-/* eslint-disable max-classes-per-file */
 import React, { Component } from 'react';
 import { Tabs } from 'antd';
 import { ServiceProvider } from '../serviceContext/serviceContext';
-// import logo from '../../logo.svg';
 import './App.css';
 import Header from '../Header/Header';
 import MoviesList from '../MoviesList/MoviesList';

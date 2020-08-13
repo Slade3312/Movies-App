@@ -85,7 +85,6 @@ export default class MoviesList extends Component {
         );
       });
     }
-    // lg={{ span: 12, offset: 0 }}
 
     const pagination = (
       <Pagination
