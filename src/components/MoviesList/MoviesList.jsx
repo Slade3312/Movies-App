@@ -102,27 +102,20 @@ export default class MoviesList extends Component {
       />
     );
     const hasData = !(loading || error);
-    const spinner = loading ? <Spin tip="Loading..." /> : null;
-    const content = hasData ? (
-      <>
-        <Row gutter={[37, 37]} justify="space-around">
-          {elements}
-        </Row>
-        {pagination}
-      </>
-    ) : null;
-    const alert = error ? (
-      <Alert message="Error" description={`${errMessage}, please try to reload the site`} type="error" />
-    ) : null;
-    const notMovies =
-      hasData && movies.length === 0 ? <Alert message="No results were found for your search." type="info" /> : null;
-
     return (
       <div className="wrapper-card-list">
-        {spinner}
-        {notMovies}
-        {content}
-        {alert}
+        {loading && <Spin tip="Loading..." />}
+        {hasData && (
+          <>
+            <Row gutter={[37, 37]} justify="space-around">
+              {elements}
+            </Row>
+            {pagination}
+          </>
+        )}
+
+        {hasData && movies.length === 0 && <Alert message="No results were found for your search." type="info" />}
+        {error && <Alert message="Error" description={`${errMessage}, please try to reload the site`} type="error" />}
       </div>
     );
   }
