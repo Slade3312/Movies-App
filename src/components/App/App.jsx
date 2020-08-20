@@ -14,7 +14,7 @@ export default class App extends Component {
     searchValue: 'return',
     genres: null,
     sessionId: null,
-    activeTab: '1',
+    activeTab: 'active_search',
   };
 
   constructor(props) {
@@ -57,12 +57,12 @@ export default class App extends Component {
       <ErrorBoundary>
         <ServiceProvider value={genres}>
           <div className="App">
-            <Tabs defaultActiveKey="1" onChange={this.callback} centered="true">
-              <TabPane tab="Search" key="1">
+            <Tabs defaultActiveKey="active_search" onChange={this.callback} centered="true">
+              <TabPane tab="Search" key="active_search">
                 <Header moviesSearchQuery={this.moviesSearchQuery} />
                 <MoviesList searchValue={searchValue} getDataMovies={getSearchMovies} sessionId={sessionId} />
               </TabPane>
-              <TabPane tab="Rated" key="2">
+              <TabPane tab="Rated" key="active_rated">
                 <MoviesList getDataMovies={getRatedMovies} activeTab={activeTab} sessionId={sessionId} />
               </TabPane>
             </Tabs>

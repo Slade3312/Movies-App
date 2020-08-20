@@ -45,7 +45,7 @@ export default class MoviesList extends Component {
     if ((page !== prevState.page || search !== prevProps.searchValue) && search !== '') {
       this.updateMovies({ page, search, sessionId });
     }
-    if (activeTab === '2' && prevProps.activeTab !== '2') {
+    if (activeTab === 'active_rated' && prevProps.activeTab !== 'active_rated') {
       this.updateMovies({ page, search, sessionId });
     }
   }
