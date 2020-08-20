@@ -27,6 +27,11 @@ export default class MoviesList extends Component {
     totalPages: null,
   };
 
+  constructor(props) {
+    super(props);
+    this.onChange = this.onChange.bind(this);
+  }
+
   componentDidMount() {
     const { page } = this.state;
     const { searchValue: search, sessionId } = this.props;
@@ -45,12 +50,12 @@ export default class MoviesList extends Component {
     }
   }
 
-  onChange = (event) => {
+  onChange(event) {
     this.setState({
       page: event,
       loading: true,
     });
-  };
+  }
 
   updateMovies(options) {
     const { getDataMovies } = this.props;
@@ -88,7 +93,7 @@ export default class MoviesList extends Component {
 
     const pagination = (
       <Pagination
-        onChange={(event) => this.onChange(event)}
+        onChange={this.onChange}
         size="small"
         total={totalPages}
         defaultPageSize

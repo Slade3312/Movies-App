@@ -13,14 +13,20 @@ export default class Header extends Component {
     value: null,
   };
 
+  constructor(props) {
+    super(props);
+    this.onChange = this.onChange.bind(this);
+  }
+
   componentDidMount() {
     this.moviesSearchQueryDebounce = debounce(this.moviesSearchQuery, 1000);
   }
 
-  onChange = (value) => {
+  onChange(event) {
+    const { value } = event.target;
     this.setState({ value });
     this.moviesSearchQueryDebounce();
-  };
+  }
 
   moviesSearchQuery = () => {
     const { value } = this.state;
@@ -32,12 +38,7 @@ export default class Header extends Component {
     const { value } = this.state;
     return (
       <div className="wrapper-header">
-        <Input
-          className="input-search"
-          placeholder="Type to search"
-          onChange={(event) => this.onChange(event.target.value)}
-          value={value}
-        />
+        <Input className="input-search" placeholder="Type to search" onChange={this.onChange} value={value} />
       </div>
     );
   }

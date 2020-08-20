@@ -20,6 +20,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.TabPane = Tabs.TabPane;
+    this.moviesSearchQuery = this.moviesSearchQuery.bind(this);
   }
 
   componentDidMount() {
@@ -40,13 +41,14 @@ export default class App extends Component {
       });
   }
 
-  moviesSearchQuery = (value) => {
-    this.setState({ searchValue: value });
-  };
-
   callback = (key) => {
     this.setState({ activeTab: key });
   };
+
+  moviesSearchQuery(value) {
+    console.log(value);
+    this.setState({ searchValue: value });
+  }
 
   render() {
     const { TabPane } = Tabs;
@@ -57,7 +59,7 @@ export default class App extends Component {
           <div className="App">
             <Tabs defaultActiveKey="1" onChange={this.callback} centered="true">
               <TabPane tab="Search" key="1">
-                <Header moviesSearchQuery={(value) => this.moviesSearchQuery(value)} />
+                <Header moviesSearchQuery={this.moviesSearchQuery} />
                 <MoviesList searchValue={searchValue} getDataMovies={getSearchMovies} sessionId={sessionId} />
               </TabPane>
               <TabPane tab="Rated" key="2">
