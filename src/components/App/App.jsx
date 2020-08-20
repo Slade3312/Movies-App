@@ -7,7 +7,7 @@ import MoviesList from '../MoviesList/MoviesList';
 import MovieDBServices from '../../services/MovieDBServices';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
-const { getSearchMovies, getGenresList, getSessionId, getRatedMovies } = new MovieDBServices();
+const { getSearchMovies, getGenresList, getSessionId, getRatedMovies } = MovieDBServices;
 
 export default class App extends Component {
   state = {

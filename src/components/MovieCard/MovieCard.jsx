@@ -7,7 +7,7 @@ import notPoster from '../../img/notPoster.jpg';
 import MovieDBServices from '../../services/MovieDBServices';
 import withServiceContext from '../hoc-helpers/withServiceContext';
 
-const { setRating } = new MovieDBServices();
+const { setRating } = MovieDBServices;
 
 function cropText(text) {
   const spaceIndex = text.lastIndexOf(' ', 140);

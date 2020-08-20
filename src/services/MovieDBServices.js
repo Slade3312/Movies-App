@@ -1,12 +1,10 @@
 export default class MovieDBServices {
-  constructor() {
-    this.token =
-      'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZGEzOGVlMGVmNjMwYjczZmZkZDhkZjdlZmM3ZTA1ZCIsInN1YiI6IjVmMTY1NmQ4YzkyYzVkMDAzNjMwMzJjMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.4pVDmgfEggVyLjVUrISqiR7Cvooz7xtOqBVIs-Yinxo';
-    this.baseUrl = 'https://api.themoviedb.org/3';
-    // this.apiKey = 'api_key=9da38ee0ef630b73ffdd8df7efc7e05d';
-  }
+  static token =
+    'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5ZGEzOGVlMGVmNjMwYjczZmZkZDhkZjdlZmM3ZTA1ZCIsInN1YiI6IjVmMTY1NmQ4YzkyYzVkMDAzNjMwMzJjMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.4pVDmgfEggVyLjVUrISqiR7Cvooz7xtOqBVIs-Yinxo';
 
-  workResources = async (url, method, body) => {
+  static baseUrl = 'https://api.themoviedb.org/3';
+
+  static workResources = async (url, method, body) => {
     const res = await fetch(url, {
       method,
       headers: {
@@ -21,7 +19,7 @@ export default class MovieDBServices {
     return res.json();
   };
 
-  setRating = async (rate, sessionId, id) => {
+  static setRating = async (rate, sessionId, id) => {
     const body = {
       value: rate,
     };
@@ -39,7 +37,7 @@ export default class MovieDBServices {
     #transformMovie()- нужен плагин для babel так и не решил
     как сделать его приватным */
 
-  transformMovie(movie) {
+  static transformMovie(movie) {
     return {
       posterPath: movie.poster_path,
       title: movie.title,
@@ -52,12 +50,12 @@ export default class MovieDBServices {
     };
   }
 
-  getSessionId = async () => {
+  static getSessionId = async () => {
     const res = await this.workResources(`${this.baseUrl}/authentication/guest_session/new`);
     return res.guest_session_id;
   };
 
-  getSearchMovies = async (options) => {
+  static getSearchMovies = async (options) => {
     const { page, search } = options;
     const res = await this.workResources(
       `${this.baseUrl}/search/movie?&language=en-En&query=${search}&page=${page}&include_adult=false`
@@ -71,7 +69,7 @@ export default class MovieDBServices {
     };
   };
 
-  getRatedMovies = async (options) => {
+  static getRatedMovies = async (options) => {
     const { sessionId, page } = options;
     const res = await this.workResources(
       `${this.baseUrl}/guest_session/${sessionId}/rated/movies?&page=${page}&language=en-US&sort_by=created_at.asc`
@@ -85,7 +83,7 @@ export default class MovieDBServices {
     };
   };
 
-  getGenresList = async () => {
+  static getGenresList = async () => {
     const res = await this.workResources(`${this.baseUrl}/genre/movie/list?&language=en-US`);
     return res.genres;
   };
