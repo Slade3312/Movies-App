@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './MovieCard.css';
 import { Button, Rate, Badge } from 'antd';
 import { format } from 'date-fns';
@@ -7,28 +7,54 @@ import notPoster from '../../img/notPoster.jpg';
 import MovieDBServices from '../../services/MovieDBServices';
 import withServiceContext from '../hoc-helpers/withServiceContext';
 
-const { setRating } = MovieDBServices;
+const MovieCard = (props) => {
+  const [isRate, setIsRate] = useState(false);
 
-function cropText(text) {
-  const spaceIndex = text.lastIndexOf(' ', 140);
-  const shortReview = `${text.slice(0, spaceIndex)}...`;
-  return shortReview;
-}
+  const { setRating } = MovieDBServices;
 
-function setStyleBorderBadge(value) {
-  if (value >= 0 && value < 3) return { borderColor: '#E90000' };
-  if (value >= 3 && value < 5) return { borderColor: '#E97E00' };
-  if (value >= 5 && value < 7) return { borderColor: '#E9D100' };
-  return { borderColor: '#66E900' };
-}
+  const cropText = (text) => {
+    const spaceIndex = text.lastIndexOf(' ', 140);
+    const shortReview = `${text.slice(0, spaceIndex)}...`;
+    return shortReview;
+  };
 
-function onRating(rate, sessionId, id) {
-  setRating(rate, sessionId, id).catch((err) => {
-    console.log(err);
-  });
-}
+  const setStyleBorderBadge = (value) => {
+    if (value >= 0 && value < 3) return { borderColor: '#E90000' };
+    if (value >= 3 && value < 5) return { borderColor: '#E97E00' };
+    if (value >= 5 && value < 7) return { borderColor: '#E9D100' };
+    return { borderColor: '#66E900' };
+  };
 
-function MovieCard({ posterPath, title, releaseDate, overview, voteAverage, genreIds, genres, sessionId, id, rating }) {
+  const onRating = (rate, sessionId, id) => {
+    setIsRate(true);
+    setTimeout(() => setIsRate(false), 1000);
+    setRating(rate, sessionId, id).catch((err) => {
+      console.log(err);
+    });
+  };
+
+  const Notification = () => {
+    return (
+      <div className="notification">
+        <h3>Thank you!</h3>
+        <p>Movie added to rating</p>
+      </div>
+    );
+  };
+  const {
+    posterPath,
+    title,
+    releaseDate,
+    overview,
+    voteAverage,
+    genreIds,
+    genres,
+    sessionId,
+    id,
+    rating,
+    activeTab,
+  } = props;
+
   const baseImgSrc = 'https://image.tmdb.org/t/p/w220_and_h330_face/';
   const shortReview = cropText(overview);
   const dateRelease = releaseDate === '' ? 'not release date' : format(new Date(releaseDate), 'PP');
@@ -48,6 +74,7 @@ function MovieCard({ posterPath, title, releaseDate, overview, voteAverage, genr
 
   return (
     <div className="movies-card">
+      {isRate && <Notification />}
       <Badge count={voteAverage} className="vote-average" style={setStyleBorderBadge(voteAverage)} />
       <img className="movies-card__poster" src={srcImg} alt="poster" />
       <h2>{title}</h2>
@@ -57,13 +84,14 @@ function MovieCard({ posterPath, title, releaseDate, overview, voteAverage, genr
       <Rate
         className="movies-card__stars"
         allowHalf
+        disabled={activeTab === 'active_rated'}
         defaultValue={rating}
         count={10}
         onChange={(rate) => onRating(rate, sessionId, id)}
       />
     </div>
   );
-}
+};
 
 MovieCard.defaultProps = {
   releaseDate: '',
@@ -90,6 +118,7 @@ MovieCard.propTypes = {
   sessionId: PropTypes.string,
   id: PropTypes.number.isRequired,
   rating: PropTypes.number,
+  activeTab: PropTypes.string.isRequired,
 };
 
 export default withServiceContext(MovieCard);

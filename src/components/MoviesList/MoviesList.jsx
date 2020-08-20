@@ -15,7 +15,7 @@ export default class MoviesList extends Component {
   static defaultProps = {
     sessionId: null,
     searchValue: null,
-    activeTab: '1',
+    activeTab: 'active_search',
   };
 
   state = {
@@ -79,14 +79,14 @@ export default class MoviesList extends Component {
 
   render() {
     const { movies, loading, error, errMessage, page, totalPages } = this.state;
-    const { sessionId } = this.props;
+    const { sessionId, activeTab } = this.props;
     let elements;
     if (movies) {
       elements = movies.map((movie) => {
         const { id } = movie;
         return (
           <Col className="gutter-row" span={24} key={id} flex="387px" lg={12}>
-            <MovieCard {...movie} sessionId={sessionId} />
+            <MovieCard {...movie} sessionId={sessionId} activeTab={activeTab} />
           </Col>
         );
       });
