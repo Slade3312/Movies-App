@@ -58,6 +58,7 @@ export default class MoviesList extends Component {
   }
 
   updateMovies(options) {
+    this.setState({ loading: true });
     const { getDataMovies } = this.props;
     getDataMovies(options)
       .then(({ movies, totalPages }) => {

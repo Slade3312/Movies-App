@@ -46,7 +46,7 @@ export default class App extends Component {
   };
 
   moviesSearchQuery(value) {
-    console.log(value);
+    console.log('click');
     this.setState({ searchValue: value });
   }
 
