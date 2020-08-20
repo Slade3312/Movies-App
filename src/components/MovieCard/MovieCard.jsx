@@ -28,9 +28,8 @@ function onRating(rate, sessionId, id) {
   });
 }
 
-function MovieCard(props) {
+function MovieCard({ posterPath, title, releaseDate, overview, voteAverage, genreIds, genres, sessionId, id, rating }) {
   const baseImgSrc = 'https://image.tmdb.org/t/p/w220_and_h330_face/';
-  const { posterPath, title, releaseDate, overview, voteAverage, genreIds, genres, sessionId, id, rating } = props;
   const shortReview = cropText(overview);
   const dateRelease = releaseDate === '' ? 'not release date' : format(new Date(releaseDate), 'PP');
   const srcImg = posterPath === null ? notPoster : baseImgSrc + posterPath;
