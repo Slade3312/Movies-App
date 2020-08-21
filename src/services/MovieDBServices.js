@@ -1,5 +1,5 @@
 export default class MovieDBServices {
-  static token = process.env.TOKEN_KEY;
+  static token = process.env.REACT_APP_TOKEN_KEY;
 
   static baseUrl = 'https://api.themoviedb.org/3';
 
